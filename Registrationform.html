@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drag Racing Registration</title>
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:radial-gradient(circle at top, rgba(255,204,0,0.08), transparent 30%),linear-gradient(180deg,#050608 0%,#0b0d10 50%,#000 100%);
+    color:#fff7d1;
+}
+body:before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:repeating-linear-gradient(90deg,rgba(255,255,255,0.03) 0 2px,transparent 2px 120px);
+    animation:roadMove 8s linear infinite;
+    pointer-events:none;
+    opacity:0.3;
+}
+@keyframes roadMove{from{transform:translateX(0)}to{transform:translateX(-120px)}}
+form{
+    width:400px;
+    margin:30px auto;
+    background:linear-gradient(180deg,rgba(20,20,20,0.96),rgba(5,5,5,0.96));
+    padding:20px;
+    border:2px solid #ffcc00;
+    border-radius:12px;
+    box-shadow:0 0 25px #ffcc00;
+    position:relative;
+    z-index:1;
+}
+h1{text-align:center;color:#ffcc00;font-family:Impact,sans-serif;letter-spacing:2px;text-transform:uppercase}
+label{display:block;margin-top:10px;color:#fff7d1}
+input, select{
+    width:100%;
+    padding:8px;
+    margin-top:5px;
+    margin-bottom:10px;
+    border:1px solid #ffcc00;
+    background:#111;
+    color:#fff7d1;
+    border-radius:4px;
+    box-sizing:border-box;
+}
+button{
+    padding:10px;
+    width:48%;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.15s;
+}
+button:active{transform:scale(0.95);box-shadow:0 0 22px #ffcc00}
+.clearfix{display:flex;justify-content:space-between;margin-top:10px}
+button[type="submit"]{background-color:#ffcc00;color:#111}
+button[type="button"]{background-color:#111;color:#fff7d1;border:1px solid #ffcc00}
+.small-btn{width:100%;background-color:#0b3d91;color:white;margin-top:-5px;margin-bottom:10px}
+.back{
+    display:inline-block;
+    margin:20px auto 0;
+    padding:10px 16px;
+    background:#ffcc00;
+    color:#111;
+    text-decoration:none;
+    border-radius:20px;
+    font-weight:bold;
+}
+.center{text-align:center}
+.radio-group{
+    margin:10px 0;
+}
+.radio-group label{
+    display:inline;
+    margin-left:6px;
+}
+</style>
+</head>
+<body>
+<script>
+function handleClick(e){
+    const el = e.currentTarget;
+    el.style.transform = "scale(0.95)";
+    el.style.boxShadow = "0 0 22px #ffcc00";
+    setTimeout(()=>{el.style.transform="";el.style.boxShadow="";},180);
+}
+function togglePassword() {
+    let pass = document.getElementById("psw");
+    let confirm = document.getElementById("psw-repeat");
+    if (pass.type === "password") { pass.type = "text"; confirm.type = "text"; }
+    else { pass.type = "password"; confirm.type = "password"; }
+}
+function clearForm() {
+    document.querySelector("form").reset();
+}
+function RegistrationSummary(event){
+    event.preventDefault();
+    let firstName = document.getElementById("firstName").value.trim();
+    let middleName = document.getElementById("middleName").value.trim();
+    let lastName = document.getElementById("lastName").value.trim();
+    let fullName = [firstName, middleName, lastName].filter(Boolean).join(" ");
+    let email = document.getElementById("email").value.trim();
+    let psw = document.getElementById("psw").value;
+    let psw_repeat = document.getElementById("psw-repeat").value;
+    let age = document.getElementById("age").value;
+    let country = document.getElementById("country").value;
+    let gender = "";
+    if (document.getElementById("male").checked) gender = "Male";
+    else if (document.getElementById("female").checked) gender = "Female";
+    else if (document.getElementById("other").checked) gender = "Other";
+    if (!firstName || !lastName || !email || !psw || !psw_repeat || !age || !gender) {
+        alert("Please fill out all required fields.");
+        return;
+    }
+    if (psw !== psw_repeat) { alert("Passwords do not match."); return; }
+    alert("REGISTRATION SUMMARY\n----------------------------\nFull Name: " + fullName + "\nEmail: " + email + "\nAge: " + age + "\nGender: " + gender + "\nCountry: " + country + "\n\nTERMS & CONDITIONS\n----------------------------\nBy creating an account, you agree that all information provided is true and accurate.\nYou also agree to follow the platform rules and privacy policy.");
+}
+</script>
+<form onsubmit="RegistrationSummary(event)">
+<h1>Registration Form</h1>
+<label>First Name</label><input type="text" id="firstName" placeholder="Enter First Name">
+<label>Middle Name</label><input type="text" id="middleName" placeholder="Enter Middle Name">
+<label>Last Name</label><input type="text" id="lastName" placeholder="Enter Last Name">
+<label>Email</label><input type="text" id="email" placeholder="Enter Email">
+<label>Password</label><input type="password" id="psw" placeholder="Enter Password">
+<label>Confirm Password</label><input type="password" id="psw-repeat" placeholder="Confirm Password">
+<button type="button" class="small-btn" onclick="handleClick(event); togglePassword()">Show / Hide Password</button>
+<label>Age</label><input type="number" id="age" placeholder="Enter Age">
+<label>Gender</label>
+<div class="radio-group">
+    <input type="radio" name="gender" id="male"><label for="male">Male</label><br>
+    <input type="radio" name="gender" id="female"><label for="female">Female</label><br>
+    <input type="radio" name="gender" id="other"><label for="other">Other</label>
+</div>
+<label>Country</label>
+<select id="country">
+    <option>USA</option><option>UK</option><option>Brazil</option><option>China</option><option>Japan</option><option>Philippines</option><option>Korea</option>
+</select>
+<div class="clearfix">
+    <button type="button" onclick="handleClick(event); clearForm()">Clear Form</button>
+    <button type="submit" onclick="handleClick(event)">Register</button>
+</div>
+<div class="center"><a class="back" href="index.html" onclick="handleClick(event)">Back</a></div>
+</form>
+</body>
+</html>
